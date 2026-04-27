@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHub Electronics - Online Store</title>
+    <style>
+        /* Global Styles and Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        /* Section Styles */
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 1.8em;
+        }
+
+        /* Product Catalog Styles */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 1.4em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        .add-btn {
+            flex: 1;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        .add-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Shopping Cart Styles */
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-details {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .cart-item-price {
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 0 20px;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .cart-total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        /* Checkout Form Styles */
+        .checkout-section {
+            grid-column: 1 / -1;
+            display: none;
+        }
+
+        .checkout-section.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group.error input,
+        .form-group.error textarea {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Button Styles */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Order Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>🛒 TechHub Electronics</h1>
+            <p>Premium Electronics & Gadgets - Fast Delivery Nationwide</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Part 1: Product Selection -->
+            <div class="section">
+                <h2>📱 Available Products</h2>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Part 2: Shopping Cart -->
+            <div class="section">
+                <h2>🛍️ Shopping Cart</h2>
+                <div id="cartItems" class="cart-items">
+                    <div class="empty-cart">Your cart is empty</div>
+                </div>
+                <div id="cartTotal" class="cart-total" style="display: none;">
+                    Total: $0.00
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" id="checkoutBtn" disabled>Proceed to Checkout</button>
+                </div>
+            </div>
+
+            <!-- Checkout Form Section -->
+            <div class="section checkout-section" id="checkoutSection">
+                <h2>💳 Checkout Information</h2>
+                <form id="checkoutForm">
+                    <!-- Billing Address -->
+                    <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 15px;">Billing Address</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="billName">Full Name *</label>
+                            <input type="text" id="billName" required>
+                            <span class="error-message">Please enter your full name</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="billEmail">Email Address *</label>
+                            <input type="email" id="billEmail" required>
+                            <span class="error-message">Please enter a valid email</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="billPhone">Phone Number *</label>
+                            <input type="tel" id="billPhone" placeholder="(123) 456-7890" required>
+                            <span class="error-message">Please enter a valid phone number</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="billAddress">Street Address *</label>
+                            <input type="text" id="billAddress" required>
+                            <span class="error-message">Please enter your address</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="billCity">City *</label>
+                            <input type="text" id="billCity" required>
+                            <span class="error-message">Please enter your city</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="billState">State *</label>
+                            <input type="text" id="billState" placeholder="e.g., CA" required>
+                            <span class="error-message">Please enter your state</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="billZip">ZIP Code *</label>
+                            <input type="text" id="billZip" placeholder="12345" required>
+                            <span class="error-message">Please enter a valid ZIP code</span>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">Delivery Address</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sameAsBilling">
+                            Same as billing address
+                        </label>
+                    </div>
+                    <div class="form-grid" id="deliveryAddressFields">
+                        <div class="form-group">
+                            <label for="delName">Full Name *</label>
+                            <input type="text" id="delName" required>
+                            <span class="error-message">Please enter recipient name</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="delPhone">Phone Number *</label>
+                            <input type="tel" id="delPhone" placeholder="(123) 456-7890" required>
+                            <span class="error-message">Please enter a valid phone number</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="delAddress">Street Address *</label>
+                            <input type="text" id="delAddress" required>
+                            <span class="error-message">Please enter delivery address</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="delCity">City *</label>
+                            <input type="text" id="delCity" required>
+                            <span class="error-message">Please enter city</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="delState">State *</label>
+                            <input type="text" id="delState" placeholder="e.g., CA" required>
+                            <span class="error-message">Please enter state</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="delZip">ZIP Code *</label>
+                            <input type="text" id="delZip" placeholder="12345" required>
+                            <span class="error-message">Please enter a valid ZIP code</span>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="delInstructions">Delivery Instructions (Optional)</label>
+                            <textarea id="delInstructions" placeholder="e.g., Leave at front door"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Information -->
+                    <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">Payment Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="cardNumber">Card Number *</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            <span class="error-message">Please enter a valid 16-digit card number</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name *</label>
+                            <input type="text" id="cardName" required>
+                            <span class="error-message">Please enter cardholder name</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardExpiry">Expiry Date (MM/YY) *</label>
+                            <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                            <span class="error-message">Please enter valid expiry date</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardCVV">CVV *</label>
+                            <input type="text" id="cardCVV" placeholder="123" maxlength="4" required>
+                            <span class="error-message">Please enter 3 or 4 digit CVV</span>
+                        </div>
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="backToCartBtn">Back to Cart</button>
+                        <button type="submit" class="btn btn-primary">Place Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <h2>✅ Order Placed Successfully!</h2>
+            <p>Thank you for your order!</p>
+            <p id="orderSummary"></p>
+            <p>You will receive a confirmation email shortly.</p>
+            <button class="modal-close" id="closeModal">Continue Shopping</button>
+        </div>
+    </div>
+
+    <script>
+        // Product catalog data - Array of available products
+        const products = [
+            { id: 1, name: 'Laptop Pro 15"', price: 1299.99, emoji: '💻' },
+            { id: 2, name: 'Wireless Mouse', price: 29.99, emoji: '🖱️' },
+            { id: 3, name: 'Mechanical Keyboard', price: 89.99, emoji: '⌨️' },
+            { id: 4, name: 'USB-C Hub', price: 49.99, emoji: '🔌' },
+            { id: 5, name: '4K Monitor 27"', price: 399.99, emoji: '🖥️' },
+            { id: 6, name: 'Webcam HD', price: 79.99, emoji: '📷' },
+            { id: 7, name: 'Bluetooth Headphones', price: 149.99, emoji: '🎧' },
+            { id: 8, name: 'External SSD 1TB', price: 119.99, emoji: '💾' }
+        ];
+
+        // Shopping cart - Stores selected items
+        let cart = [];
+
+        /**
+         * Initialize the application when page loads
+         * Renders product catalog and sets up event listeners
+         */
+        function init() {
+            renderProducts();
+            setupEventListeners();
+        }
+
+        /**
+         * Render all products in the catalog grid
+         * Creates HTML elements for each product dynamically
+         */
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-controls">
+                        <input type="number" class="quantity-input" id="qty-${product.id}" 
+                               min="1" value="1" max="99">
+                        <button class="add-btn" onclick="addToCart(${product.id})">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * Add a product to the shopping cart
+         * @param {number} productId - ID of the product to add
+         * Validates quantity and updates cart display
+         */
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const qtyInput = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(qtyInput.value);
+
+            // Validate quantity input
+            if (isNaN(quantity) || quantity < 1) {
+                alert('Please enter a valid quantity (minimum 1)');
+                return;
+            }
+
+            if (quantity > 99) {
+                alert('Maximum quantity is 99 per item');
+                return;
+            }
+
+            // Check if product already exists in cart
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                // Update quantity if product already in cart
+                existingItem.quantity += quantity;
+            } else {
+                // Add new item to cart
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: quantity
+                });
+            }
+
+            // Reset quantity input and update display
+            qtyInput.value = 1;
+            renderCart();
+        }
+
+        /**
+         * Render the shopping cart display
+         * Updates cart items, total price, and checkout button state
+         */
+        function renderCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartTotalDiv = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            // Display empty cart message if no items
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                cartTotalDiv.style.display = 'none';
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            // Render each cart item
+            cartItemsDiv.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-details">
+                            Quantity: ${item.quantity} × $${item.price.toFixed(2)}
+                        </div>
+                    </div>
+                    <div class="cart-item-price">
+                        $${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                    <button class="delete-btn" onclick="removeFromCart(${item.id})">
+                        Delete
+                    </button>
+                </div>
+            `).join('');
+
+            // Calculate and display total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotalDiv.innerHTML = `Total: $${total.toFixed(2)}`;
+            cartTotalDiv.style.display = 'block';
+            checkoutBtn.disabled = false;
+        }
+
+        /**
+         * Remove an item from the shopping cart
+         * @param {number} productId - ID of the product to remove
+         */
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            renderCart();
+        }
+
+        /**
+         * Setup all event listeners for the application
+         * Handles navigation, form submission, and input formatting
+         */
+        function setupEventListeners() {
+            // Checkout button - Show checkout form
+            document.getElementById('checkoutBtn').addEventListener('click', () => {
+                document.getElementById('checkoutSection').classList.add('active');
+                document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Back to cart button - Return to shopping
+            document.getElementById('backToCartBtn').addEventListener('click', () => {
+                document.getElementById('checkoutSection').classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Same as billing checkbox - Auto-fill delivery address
+            document.getElementById('sameAsBilling').addEventListener('change', function() {
+                const deliveryFields = document.getElementById('deliveryAddressFields');
+                if (this.checked) {
+                    // Copy billing to delivery
+                    document.getElementById('delName').value = document.getElementById('billName').value;
+                    document.getElementById('delPhone').value = document.getElementById('billPhone').value;
+                    document.getElementById('delAddress').value = document.getElementById('billAddress').value;
+                    document.getElementById('delCity').value = document.getElementById('billCity').value;
+                    document.getElementById('delState').value = document.getElementById('billState').value;
+                    document.getElementById('delZip').value = document.getElementById('billZip').value;
+                    deliveryFields.style.display = 'none';
+                } else {
+                    deliveryFields.style.display = 'grid';
+                }
+            });
+
+            // Format credit card number input
+            document.getElementById('cardNumber').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+            });
+
+            // Format expiry date input (MM/YY)
+            document.getElementById('cardExpiry').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                }
+                e.target.value = value;
+            });
+
+            // Allow only numbers for CVV
+            document.getElementById('cardCVV').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '');
+            });
+
+            // Format phone number inputs
+            ['billPhone', 'delPhone'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 0) {
+                        if (value.length <= 3) {
+                            value = `(${value}`;
+                        } else if (value.length <= 6) {
+                            value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                        } else {
+                            value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                        }
+                    }
+                    e.target.value = value;
+                });
+            });
+
+            // Form submission with validation
+            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateForm()) {
+                    submitOrder();
+                }
+            });
+
+            // Close modal button
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('confirmationModal').classList.remove('active');
+                resetOrder();
+            });
+        }
+
+        /**
+         * Validate all form inputs
+         * @returns {boolean} True if all validations pass
+         * Checks each field and displays appropriate error messages
+         */
+        function validateForm() {
+            let isValid = true;
+
+            // Helper function to validate a field
+            const validateField = (id, validator, errorMsg) => {
+                const field = document.getElementById(id);
+                const formGroup = field.parentElement;
+                const errorSpan = formGroup.querySelector('.error-message');
+                
+                if (!validator(field.value.trim())) {
+                    formGroup.classList.add('error');
+                    if (errorMsg) errorSpan.textContent = errorMsg;
+                    isValid = false;
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            };
+
+            // Skip delivery address validation if same as billing
+            const sameAsBilling = document.getElementById('sameAsBilling').checked;
+
+            // Validate billing name (at least 2 words)
+            validateField('billName', val => val.split(' ').filter(s => s.length > 0).length >= 2,
+                'Please enter your full name (first and last)');
+
+            // Validate billing email
+            validateField('billEmail', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+                'Please enter a valid email address');
+
+            // Validate billing phone (10 digits)
+            validateField('billPhone', val => val.replace(/\D/g, '').length === 10,
+                'Please enter a valid 10-digit phone number');
+
+            // Validate billing address
+            validateField('billAddress', val => val.length >= 5,
+                'Please enter a complete street address');
+
+            // Validate billing city
+            validateField('billCity', val => val.length >= 2 && /^[a-zA-Z\s]+$/.test(val),
+                'Please enter a valid city name');
+
+            // Validate billing state (2 letters)
+            validateField('billState', val => /^[A-Z]{2}$/i.test(val),
+                'Please enter 2-letter state code (e.g., CA)');
+
+            // Validate billing ZIP (5 digits)
+            validateField('billZip', val => /^\d{5}$/.test(val),
+                'Please enter a valid 5-digit ZIP code');
+
+            // Validate delivery address if not same as billing
+            if (!sameAsBilling) {
+                validateField('delName', val => val.split(' ').filter(s => s.length > 0).length >= 2,
+                    'Please enter recipient full name');
+
+                validateField('delPhone', val => val.replace(/\D/g, '').length === 10,
+                    'Please enter a valid 10-digit phone number');
+
+                validateField('delAddress', val => val.length >= 5,
+                    'Please enter a complete street address');
+
+                validateField('delCity', val => val.length >= 2 && /^[a-zA-Z\s]+$/.test(val),
+                    'Please enter a valid city name');
+
+                validateField('delState', val => /^[A-Z]{2}$/i.test(val),
+                    'Please enter 2-letter state code');
+
+                validateField('delZip', val => /^\d{5}$/.test(val),
+                    'Please enter a valid 5-digit ZIP code');
+            }
+
+            // Validate card number (16 digits)
+            validateField('cardNumber', val => val.replace(/\s/g, '').length === 16 && /^\d+$/.test(val.replace(/\s/g, '')),
+                'Please enter a valid 16-digit card number');
+
+            // Validate cardholder name
+            validateField('cardName', val => val.length >= 3,
+                'Please enter the cardholder name');
+
+            // Validate expiry date (MM/YY format and not expired)
+            validateField('cardExpiry', val => {
+                const match = val.match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+                if (!match) return false;
+                const month = parseInt(match[1]);
+                const year = parseInt('20' + match[2]);
+                const now = new Date();
+                const expiry = new Date(year, month - 1);
+                return expiry > now;
+            }, 'Please enter a valid future expiry date (MM/YY)');
+
+            // Validate CVV (3 or 4 digits)
+            validateField('cardCVV', val => /^\d{3,4}$/.test(val),
+                'Please enter a valid 3 or 4 digit CVV');
+
+            // Scroll to first error if validation failed
+            if (!isValid) {
+                const firstError = document.querySelector('.form-group.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            return isValid;
+        }
+
+        /**
+         * Submit the order and show confirmation
+         * Displays order summary and resets the form
+         */
+        function submitOrder() {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Display order confirmation
+            document.getElementById('orderSummary').innerHTML = `
+                Order Total: <strong>${total.toFixed(2)}</strong><br>
+                Items: <strong>${itemCount}</strong><br>
+                Order ID: <strong>#${Math.random().toString(36).substr(2, 9).toUpperCase()}</strong>
+            `;
+            
+            document.getElementById('confirmationModal').classList.add('active');
+        }
+
+        /**
+         * Reset the order and return to shopping
+         * Clears cart, form, and returns to product view
+         */
+        function resetOrder() {
+            cart = [];
+            renderCart();
+            document.getElementById('checkoutForm').reset();
+            document.getElementById('checkoutSection').classList.remove('active');
+            
+            // Remove all error states
+            document.querySelectorAll('.form-group.error').forEach(group => {
+                group.classList.remove('error');
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize the application when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
